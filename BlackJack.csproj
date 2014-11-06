@@ -72,7 +72,9 @@
     <Compile Include="model\Dealer.cs" />
     <Compile Include="model\Deck.cs" />
     <Compile Include="model\Game.cs" />
-    <Compile Include="view\NewHandListener.cs" />
+    <Compile Include="model\INewHandListener.cs" />
+    <Compile Include="model\ObserverFactory.cs" />
+    <Compile Include="view\GamePauser.cs" />
     <Compile Include="model\Player.cs" />
     <Compile Include="model\rules\AmericanNewGameStrategy.cs" />
     <Compile Include="model\rules\BasicHitStrategy.cs" />

@@ -9,8 +9,7 @@ namespace BlackJack.model
     class Player
     {
         private List<Card> m_hand = new List<Card>();
-        private NewHandListener m_observer = new NewHandListener();
-        
+
         public void DealCard(Card a_card)
         {
             m_hand.Add(a_card);
@@ -18,7 +17,6 @@ namespace BlackJack.model
 
         public IEnumerable<Card> GetHand()
         {
-            m_observer.OnNewHandEvent();
             return m_hand.Cast<Card>();
         }
 
