@@ -13,12 +13,15 @@ namespace BlackJack.model
         private rules.INewGameStrategy m_newGameRule;
         private rules.IHitStrategy m_hitRule;
         private rules.IWinnerStrategy m_winnerRule;
-        
-        public Dealer(rules.RulesFactory a_rulesFactory)
+        private List<view.INewCardListener> m_observers;
+
+        public Dealer(rules.RulesFactory a_rulesFactory, view.IView v)
         {
             m_newGameRule = a_rulesFactory.GetNewGameRule();
             m_hitRule = a_rulesFactory.GetHitRule();
             m_winnerRule = a_rulesFactory.GetWinnerRule();
+            m_observers = new List<view.INewCardListener>();
+            m_observers.Add(v);
         }
 
         public bool NewGame(Player a_player)
@@ -28,16 +31,40 @@ namespace BlackJack.model
                 m_deck = new Deck();
                 ClearHand();
                 a_player.ClearHand();
-                return m_newGameRule.NewGame(m_deck, this, a_player);
+                return m_newGameRule.NewGame(this, a_player);
             }
             return false;
+        }
+
+        public void PublishNewCardEvent(Card c)
+        {
+            foreach (view.INewCardListener m_observer in m_observers)
+            {
+                m_observer.OnNewCardEvent(c);
+            }
+        }
+
+        public void showAndDealCard(Player a_player)
+        {
+            Card c = m_deck.GetCard();
+            c.Show(true);
+            PublishNewCardEvent(c);
+            a_player.DealCard(c);
+        }
+
+        public void showAndDealCard(bool showCard)
+        {
+            Card c = m_deck.GetCard();
+            c.Show(showCard);
+            PublishNewCardEvent(c);
+            this.DealCard(c);
         }
 
         public bool Hit(Player a_player)
         {
             if (m_deck != null && a_player.CalcScore() < g_maxScore && !IsGameOver())
             {
-                a_player.showAndDealCard(m_deck);
+                showAndDealCard(a_player);
                 return true;
             }
             return false;
@@ -63,14 +90,14 @@ namespace BlackJack.model
             {
                 ShowHand();
                 IEnumerable<Card> cards = GetHand();
-              
-                foreach(Card card in cards)
+
+                foreach (Card card in cards)
                 {
                     card.Show(true);
                 }
                 while (m_hitRule.DoHit(this))
                 {
-                    showAndDealCard(m_deck);
+                    showAndDealCard(true);
                 }
                 return true;
             }

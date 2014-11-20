@@ -18,32 +18,30 @@ namespace BlackJack.view
             System.Console.WriteLine("Hello Black Jack World");
             System.Console.WriteLine("Type {0} to Play, {1} to Hit, {2} to Stand or {3} to Quit\n", play, hit, stand, quit);
         }
-        public int GetInput()
+
+        public PlayerInput GetInput()
         {
             string letter = System.Console.ReadLine();
-            int input = 0;
+            PlayerInput playerInput = PlayerInput.Indefinite;
 
             if (letter == play)
             {
-                input = 1;
+                playerInput = PlayerInput.Play;
             }
             else if (letter == hit)
             {
-                input = 2;
+                playerInput = PlayerInput.Hit;
             }
             else if (letter == stand)
             {
-                input = 3;
+                playerInput = PlayerInput.Stand;
             }
             else if (letter == quit)
             {
-                input = 4;
+                playerInput = PlayerInput.Quit;
             }
-            else
-            {
-                throw new Exception("Something went wrong");
-            }
-            return input;
+
+            return playerInput;
         }
 
         public void DisplayCard(model.Card a_card)
@@ -83,7 +81,12 @@ namespace BlackJack.view
             {
                 System.Console.WriteLine("You Won!");
             }
-            
+        }
+
+        public void OnNewCardEvent(model.Card c)
+        {
+            System.Threading.Thread.Sleep(2000);
+            DisplayCard(c);
         }
     }
 }

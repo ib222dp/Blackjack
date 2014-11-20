@@ -7,15 +7,15 @@ namespace BlackJack.model.rules
 {
     class AmericanNewGameStrategy : INewGameStrategy
     {
-        public bool NewGame(Deck a_deck, Dealer a_dealer, Player a_player)
+        public bool NewGame(Dealer a_dealer, Player a_player)
         {
-            a_player.showAndDealCard(a_deck);
+            a_dealer.showAndDealCard(a_player);
 
-            a_dealer.showAndDealCard(a_deck);
+            a_dealer.showAndDealCard(true);
 
-            a_player.showAndDealCard(a_deck);
+            a_dealer.showAndDealCard(a_player);
 
-            a_dealer.showAndDealCard(a_deck);
+            a_dealer.showAndDealCard(false);
 
             return true;
         }

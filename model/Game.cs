@@ -9,15 +9,11 @@ namespace BlackJack.model
     {
         private model.Dealer m_dealer;
         private model.Player m_player;
-        private List<INewHandListener> m_observers = new List<INewHandListener>();
-        private ObserverFactory m_observerFactory = new ObserverFactory();
-
-        public Game()
+     
+        public Game(view.IView v)
         {
-            m_dealer = new Dealer(new rules.RulesFactory());
+            m_dealer = new Dealer(new rules.RulesFactory(), v);
             m_player = new Player();
-            INewHandListener newHandListener = m_observerFactory.GetHandListeners();
-            m_observers.Add(newHandListener);
         }
 
         public bool IsGameOver()
@@ -45,23 +41,13 @@ namespace BlackJack.model
             return m_dealer.Stand();
         }
 
-        public void PublishNewHandEvent()
-        {
-            foreach (INewHandListener m_observer in m_observers)
-            {
-                m_observer.OnNewHandEvent();
-            }
-        }
-
         public IEnumerable<Card> GetDealerHand()
         {
-            PublishNewHandEvent();
             return m_dealer.GetHand();
         }
 
         public IEnumerable<Card> GetPlayerHand()
         {
-           PublishNewHandEvent();
             return m_player.GetHand();
         }
 
