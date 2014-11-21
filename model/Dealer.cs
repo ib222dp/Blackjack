@@ -44,19 +44,23 @@ namespace BlackJack.model
             }
         }
 
-        public void showAndDealCard(Player a_player)
+        private Card GetAndShowCard(bool showCard)
         {
             Card c = m_deck.GetCard();
-            c.Show(true);
+            c.Show(showCard);
             PublishNewCardEvent(c);
+            return c;
+        }
+
+        public void showAndDealCard(Player a_player)
+        {
+            Card c = GetAndShowCard(true);
             a_player.DealCard(c);
         }
 
         public void showAndDealCard(bool showCard)
         {
-            Card c = m_deck.GetCard();
-            c.Show(showCard);
-            PublishNewCardEvent(c);
+            Card c = GetAndShowCard(showCard);
             this.DealCard(c);
         }
 
